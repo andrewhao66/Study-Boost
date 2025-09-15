@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Study Booster - 練習模式</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <link rel="stylesheet" href="shared-styles.css">
+</head>
+<body>
+  <!-- 導航欄 -->
+  <nav class="navbar">
+    <div class="nav-container">
+      <div class="nav-brand">
+        <span class="nav-icon">📚</span>
+        <span class="nav-title">Study Booster</span>
+      </div>
+      <div class="nav-menu">
+        <a href="index.html" class="nav-link">📊 儀表板</a>
+        <a href="practice.html" class="nav-link active">📝 練習</a>
+        <a href="review.html" class="nav-link">🔄 複習</a>
+        <a href="analytics.html" class="nav-link">📈 分析</a>
+        <a href="settings.html" class="nav-link">⚙️ 設定</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- 主要內容 -->
+  <main class="main-content">
+    <div class="practice-layout">
+      <!-- 左側：練習區域 -->
+      <section class="practice-section">
+        <!-- 練習狀態 -->
+        <div class="practice-status">
+          <div class="status-item">
+            <span class="status-label">進度</span>
+            <span class="status-value" id="practiceProgress">0/30</span>
+          </div>
+          <div class="status-item">
+            <span class="status-label">正確率</span>
+            <span class="status-value" id="sessionAccuracy">0%</span>
+          </div>
+          <div class="status-item">
+            <span class="status-label">剩餘時間</span>
+            <span class="status-value" id="timeRemaining">45:00</span>
+          </div>
+        </div>
+
+        <!-- 題目卡片 -->
+        <div class="question-card">
+          <div class="question-header">
+            <div class="question-meta">
+              <span class="subject-tag" id="questionSubject">數學</span>
+              <span class="difficulty-tag" id="questionDifficulty">中等</span>
+            </div>
+            <div class="question-number" id="questionNumber">第 1 題</div>
+          </div>
+          
+          <div class="question-content">
+            <h2 class="question-stem" id="questionStem">
+              載入中...
+            </h2>
+            
+            <div class="question-options" id="questionOptions">
+              <!-- 選項將通過 JS 動態生成 -->
+            </div>
+          </div>
+          
+          <div class="question-actions">
+            <button class="btn-primary" id="submitAnswer" disabled>提交答案</button>
+            <button class="btn-secondary" id="skipQuestion">跳過</button>
+            <button class="btn-secondary" id="hintButton">提示</button>
+          </div>
+        </div>
+
+        <!-- 解析區域 -->
+        <div class="explanation-card hidden" id="explanationCard">
+          <h3>題目解析</h3>
+          <p id="explanationText"></p>
+          <div class="explanation-actions">
+            <button class="btn-primary" id="nextQuestion">下一題</button>
+            <button class="btn-secondary" id="addToReview">加入複習</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- 右側：實時統計 -->
+      <aside class="practice-sidebar">
+        <!-- 本次練習統計 -->
+        <div class="sidebar-card">
+          <h3>本次練習</h3>
+          <div class="practice-stats">
+            <div class="stat-mini">
+              <div class="stat-mini-value" id="correctCount">0</div>
+              <div class="stat-mini-label">答對</div>
+            </div>
+            <div class="stat-mini">
+              <div class="stat-mini-value" id="wrongCount">0</div>
+              <div class="stat-mini-label">答錯</div>
+            </div>
+            <div class="stat-mini">
+              <div class="stat-mini-value" id="skipCount">0</div>
+              <div class="stat-mini-label">跳過</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 答題速度圖表 -->
+        <div class="sidebar-card">
+          <h3>答題速度</h3>
+          <div class="chart-wrapper-small">
+            <canvas id="speedChart"></canvas>
+          </div>
+        </div>
+
+        <!-- 難度分佈 -->
+        <div class="sidebar-card">
+          <h3>難度分佈</h3>
+          <div class="difficulty-bars">
+            <div class="difficulty-bar">
+              <div class="difficulty-label">簡單</div>
+              <div class="difficulty-progress">
+                <div class="difficulty-fill easy" style="width: 30%"></div>
+              </div>
+              <div class="difficulty-count">3</div>
+            </div>
+            <div class="difficulty-bar">
+              <div class="difficulty-label">中等</div>
+              <div class="difficulty-progress">
+                <div class="difficulty-fill medium" style="width: 50%"></div>
+              </div>
+              <div class="difficulty-count">5</div>
+            </div>
+            <div class="difficulty-bar">
+              <div class="difficulty-label">困難</div>
+              <div class="difficulty-progress">
+                <div class="difficulty-fill hard" style="width: 20%"></div>
+              </div>
+              <div class="difficulty-count">2</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 學習建議 -->
+        <div class="sidebar-card">
+          <h3>智能建議</h3>
+          <div class="suggestions" id="practicesuggestions">
+            <div class="suggestion-item">
+              <div class="suggestion-icon">💡</div>
+              <div class="suggestion-text">建議多練習數學題目</div>
+            </div>
+            <div class="suggestion-item">
+              <div class="suggestion-icon">⚡</div>
+              <div class="suggestion-text">答題速度良好，保持專注</div>
+            </div>
+          </div>
+        </div>
+      </aside>
+    </div>
+  </main>
+
+  <script src="shared-data.js"></script>
+  <script src="practice.js"></script>
+</body>
+</html>

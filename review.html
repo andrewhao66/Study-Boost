@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Study Booster - 錯題複習</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <link rel="stylesheet" href="shared-styles.css">
+</head>
+<body>
+  <!-- 導航欄 -->
+  <nav class="navbar">
+    <div class="nav-container">
+      <div class="nav-brand">
+        <span class="nav-icon">📚</span>
+        <span class="nav-title">Study Booster</span>
+      </div>
+      <div class="nav-menu">
+        <a href="index.html" class="nav-link">📊 儀表板</a>
+        <a href="practice.html" class="nav-link">📝 練習</a>
+        <a href="review.html" class="nav-link active">🔄 複習</a>
+        <a href="analytics.html" class="nav-link">📈 分析</a>
+        <a href="settings.html" class="nav-link">⚙️ 設定</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- 主要內容 -->
+  <main class="main-content">
+    <!-- 複習概覽 -->
+    <section class="review-overview">
+      <div class="overview-stats">
+        <div class="overview-card">
+          <div class="overview-icon">📝</div>
+          <div class="overview-content">
+            <div class="overview-number" id="totalWrongQuestions">15</div>
+            <div class="overview-label">錯題總數</div>
+          </div>
+        </div>
+        
+        <div class="overview-card">
+          <div class="overview-icon">✅</div>
+          <div class="overview-content">
+            <div class="overview-number" id="masteredQuestions">8</div>
+            <div class="overview-label">已掌握</div>
+          </div>
+        </div>
+        
+        <div class="overview-card">
+          <div class="overview-icon">⚠️</div>
+          <div class="overview-content">
+            <div class="overview-number" id="urgentQuestions">7</div>
+            <div class="overview-label">待加強</div>
+          </div>
+        </div>
+        
+        <div class="overview-card">
+          <div class="overview-icon">📈</div>
+          <div class="overview-content">
+            <div class="overview-number" id="improvementRate">73%</div>
+            <div class="overview-label">改善率</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 複習內容 -->
+    <section class="review-content">
+      <div class="review-layout">
+        <!-- 左側：錯題列表和圖表 -->
+        <div class="review-main">
+          <!-- 篩選器 -->
+          <div class="review-filters">
+            <div class="filter-group">
+              <label>科目篩選</label>
+              <select id="subjectFilter">
+                <option value="all">全部科目</option>
+                <option value="math">數學</option>
+                <option value="physics">物理</option>
+                <option value="chemistry">化學</option>
+                <option value="english">英文</option>
+              </select>
+            </div>
+            
+            <div class="filter-group">
+              <label>難度篩選</label>
+              <select id="difficultyFilter">
+                <option value="all">全部難度</option>
+                <option value="easy">簡單</option>
+                <option value="medium">中等</option>
+                <option value="hard">困難</option>
+              </select>
+            </div>
+            
+            <div class="filter-group">
+              <label>掌握程度</label>
+              <select id="masteryFilter">
+                <option value="all">全部</option>
+                <option value="low">待加強</option>
+                <option value="medium">進步中</option>
+                <option value="high">已掌握</option>
+              </select>
+            </div>
+            
+            <button class="btn-primary" id="startReview">開始複習</button>
+          </div>
+
+          <!-- 錯題分析圖表 -->
+          <div class="chart-section">
+            <div class="chart-row">
+              <div class="chart-container">
+                <div class="chart-header">
+                  <h3>錯題科目分佈</h3>
+                </div>
+                <div class="chart-wrapper">
+                  <canvas id="wrongSubjectChart"></canvas>
+                </div>
+              </div>
+              
+              <div class="chart-container">
+                <div class="chart-header">
+                  <h3>複習進度趨勢</h3>
+                </div>
+                <div class="chart-wrapper">
+                  <canvas id="reviewProgressChart"></canvas>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- 錯題列表 -->
+          <div class="wrong-questions-list">
+            <div class="list-header">
+              <h3>錯題列表</h3>
+              <div class="list-controls">
+                <button class="btn-secondary" id="sortByDate">按日期排序</button>
+                <button class="btn-secondary" id="sortByDifficulty">按難度排序</button>
+                <button class="btn-secondary" id="sortByMastery">按掌握度排序</button>
+              </div>
+            </div>
+            
+            <div class="questions-grid" id="wrongQuestionsList">
+              <!-- 錯題項目將通過 JS 動態生成 -->
+            </div>
+          </div>
+        </div>
+
+        <!-- 右側：學習建議和統計 -->
+        <aside class="review-sidebar">
+          <!-- 複習計劃 -->
+          <div class="sidebar-card">
+            <h3>今日複習計劃</h3>
+            <div class="review-plan">
+              <div class="plan-item">
+                <div class="plan-subject">數學</div>
+                <div class="plan-count">5 題</div>
+                <div class="plan-progress">
+                  <div class="plan-bar">
+                    <div class="plan-fill" style="width: 60%"></div>
+                  </div>
+                  <span class="plan-percent">60%</span>
+                </div>
+              </div>
+              
+              <div class="plan-item">
+                <div class="plan-subject">物理</div>
+                <div class="plan-count">3 題</div>
+                <div class="plan-progress">
+                  <div class="plan-bar">
+                    <div class="plan-fill" style="width: 33%"></div>
+                  </div>
+                  <span class="plan-percent">33%</span>
+                </div>
+              </div>
+              
+              <div class="plan-item">
+                <div class="plan-subject">化學</div>
+                <div class="plan-count">2 題</div>
+                <div class="plan-progress">
+                  <div class="plan-bar">
+                    <div class="plan-fill" style="width: 0%"></div>
+                  </div>
+                  <span class="plan-percent">0%</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- 記憶曲線 -->
+          <div class="sidebar-card">
+            <h3>記憶曲線</h3>
+            <div class="chart-wrapper-small">
+              <canvas id="memoryChart"></canvas>
+            </div>
+            <div class="memory-tips">
+              <div class="tip-item">
+                <span class="tip-time">1天後</span>
+                <span class="tip-action">快速複習</span>
+              </div>
+              <div class="tip-item">
+                <span class="tip-time">3天後</span>
+                <span class="tip-action">重點練習</span>
+              </div>
+              <div class="tip-item">
+                <span class="tip-time">7天後</span>
+                <span class="tip-action">鞏固測試</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- 學習建議 */
+          <div class="sidebar-card">
+            <h3>智能建議</h3>
+            <div class="suggestions">
+              <div class="suggestion-item">
+                <div class="suggestion-icon">🎯</div>
+                <div class="suggestion-text">優先複習數學二次函數相關題目</div>
+              </div>
+              <div class="suggestion-item">
+                <div class="suggestion-icon">⏰</div>
+                <div class="suggestion-text">建議每次複習 15-20 分鐘</div>
+              </div>
+              <div class="suggestion-item">
+                <div class="suggestion-icon">🔄</div>
+                <div class="suggestion-text">3 題物理題目需要重點關注</div>
+              </div>
+            </div>
+          </div>
+        </aside>
+      </div>
+    </section>
+  </main>
+
+  <script src="shared-data.js"></script>
+  <script src="review.js"></script>
+</body>
+</html>

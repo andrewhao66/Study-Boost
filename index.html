@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Study Booster - 學習儀表板</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <link rel="stylesheet" href="shared-styles.css">
+</head>
+<body>
+  <!-- 導航欄 -->
+  <nav class="navbar">
+    <div class="nav-container">
+      <div class="nav-brand">
+        <span class="nav-icon">📚</span>
+        <span class="nav-title">Study Booster</span>
+      </div>
+      <div class="nav-menu">
+        <a href="index.html" class="nav-link active">📊 儀表板</a>
+        <a href="practice.html" class="nav-link">📝 練習</a>
+        <a href="review.html" class="nav-link">🔄 複習</a>
+        <a href="analytics.html" class="nav-link">📈 分析</a>
+        <a href="settings.html" class="nav-link">⚙️ 設定</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- 主要內容 -->
+  <main class="main-content">
+    <!-- 頂部統計卡片 -->
+    <section class="stats-grid">
+      <div class="stat-card">
+        <div class="stat-icon">📚</div>
+        <div class="stat-content">
+          <div class="stat-value" id="totalQuestions">0</div>
+          <div class="stat-label">今日題數</div>
+        </div>
+      </div>
+      
+      <div class="stat-card">
+        <div class="stat-icon">⏰</div>
+        <div class="stat-content">
+          <div class="stat-value" id="studyTime">0 分鐘</div>
+          <div class="stat-label">學習時間</div>
+        </div>
+      </div>
+      
+      <div class="stat-card">
+        <div class="stat-icon">🎯</div>
+        <div class="stat-content">
+          <div class="stat-value" id="accuracy">0%</div>
+          <div class="stat-label">正確率</div>
+        </div>
+      </div>
+      
+      <div class="stat-card">
+        <div class="stat-icon">🔥</div>
+        <div class="stat-content">
+          <div class="stat-value" id="streak">0 天</div>
+          <div class="stat-label">連續達標</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 圖表區域 -->
+    <section class="charts-section">
+      <div class="chart-row">
+        <!-- 學習進度圓餅圖 -->
+        <div class="chart-container">
+          <div class="chart-header">
+            <h3>今日學習進度</h3>
+            <div class="chart-actions">
+              <button class="btn-secondary" onclick="refreshChart('progressChart')">🔄</button>
+            </div>
+          </div>
+          <div class="chart-wrapper">
+            <canvas id="progressChart"></canvas>
+          </div>
+        </div>
+
+        <!-- 正確率趨勢折線圖 -->
+        <div class="chart-container">
+          <div class="chart-header">
+            <h3>正確率趨勢</h3>
+            <div class="chart-actions">
+              <select id="trendPeriod" onchange="updateTrendChart()">
+                <option value="7">近 7 天</option>
+                <option value="14">近 14 天</option>
+                <option value="30">近 30 天</option>
+              </select>
+            </div>
+          </div>
+          <div class="chart-wrapper">
+            <canvas id="trendChart"></canvas>
+          </div>
+        </div>
+      </div>
+
+      <div class="chart-row">
+        <!-- 科目分佈圓餅圖 -->
+        <div class="chart-container">
+          <div class="chart-header">
+            <h3>科目練習分佈</h3>
+          </div>
+          <div class="chart-wrapper">
+            <canvas id="subjectChart"></canvas>
+          </div>
+        </div>
+
+        <!-- 每日活動熱力圖 -->
+        <div class="chart-container">
+          <div class="chart-header">
+            <h3>學習活動概覽</h3>
+          </div>
+          <div class="activity-heatmap" id="activityHeatmap">
+            <!-- 熱力圖內容將通過 JS 動態生成 -->
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 快速操作 -->
+    <section class="quick-actions">
+      <h3>快速開始</h3>
+      <div class="action-grid">
+        <a href="practice.html" class="action-card">
+          <div class="action-icon">📝</div>
+          <div class="action-content">
+            <div class="action-title">開始練習</div>
+            <div class="action-desc">智能推薦題目</div>
+          </div>
+        </a>
+        
+        <a href="review.html" class="action-card">
+          <div class="action-icon">🔄</div>
+          <div class="action-content">
+            <div class="action-title">錯題複習</div>
+            <div class="action-desc">${wrongCount} 題待複習</div>
+          </div>
+        </a>
+        
+        <a href="analytics.html" class="action-card">
+          <div class="action-icon">📈</div>
+          <div class="action-content">
+            <div class="action-title">學習分析</div>
+            <div class="action-desc">詳細數據報告</div>
+          </div>
+        </a>
+        
+        <a href="settings.html" class="action-card">
+          <div class="action-icon">⚙️</div>
+          <div class="action-content">
+            <div class="action-title">個人設定</div>
+            <div class="action-desc">自訂學習目標</div>
+          </div>
+        </a>
+      </div>
+    </section>
+  </main>
+
+  <script src="shared-data.js"></script>
+  <script src="dashboard.js"></script>
+</body>
+</html>

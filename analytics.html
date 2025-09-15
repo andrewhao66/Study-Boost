@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Study Booster - 學習分析</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/date-fns@2.29.3/index.min.js"></script>
+  <link rel="stylesheet" href="shared-styles.css">
+</head>
+<body>
+  <!-- 導航欄 -->
+  <nav class="navbar">
+    <div class="nav-container">
+      <div class="nav-brand">
+        <span class="nav-icon">📚</span>
+        <span class="nav-title">Study Booster</span>
+      </div>
+      <div class="nav-menu">
+        <a href="index.html" class="nav-link">📊 儀表板</a>
+        <a href="practice.html" class="nav-link">📝 練習</a>
+        <a href="review.html" class="nav-link">🔄 複習</a>
+        <a href="analytics.html" class="nav-link active">📈 分析</a>
+        <a href="settings.html" class="nav-link">⚙️ 設定</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- 主要內容 -->
+  <main class="main-content">
+    <!-- 時間範圍選擇器 -->
+    <section class="analytics-header">
+      <h1>學習數據分析</h1>
+      <div class="time-range-selector">
+        <button class="range-btn active" data-range="7">近 7 天</button>
+        <button class="range-btn" data-range="30">近 30 天</button>
+        <button class="range-btn" data-range="90">近 3 個月</button>
+        <button class="range-btn" data-range="365">近 1 年</button>
+      </div>
+    </section>
+
+    <!-- 關鍵指標 -->
+    <section class="key-metrics">
+      <div class="metrics-grid">
+        <div class="metric-card">
+          <div class="metric-icon">📊</div>
+          <div class="metric-content">
+            <div class="metric-value" id="totalStudyTime">127</div>
+            <div class="metric-label">總學習時間 (小時)</div>
+            <div class="metric-change positive">+12% vs 上週</div>
+          </div>
+        </div>
+        
+        <div class="metric-card">
+          <div class="metric-icon">🎯</div>
+          <div class="metric-content">
+            <div class="metric-value" id="averageAccuracy">78.5%</div>
+            <div class="metric-label">平均正確率</div>
+            <div class="metric-change positive">+5.2% vs 上週</div>
+          </div>
+        </div>
+        
+        <div class="metric-card">
+          <div class="metric-icon">⚡</div>
+          <div class="metric-content">
+            <div class="metric-value" id="averageSpeed">45</div>
+            <div class="metric-label">平均答題速度 (秒)</div>
+            <div class="metric-change negative">-3秒 vs 上週</div>
+          </div>
+        </div>
+        
+        <div class="metric-card">
+          <div class="metric-icon">🔥</div>
+          <div class="metric-content">
+            <div class="metric-value" id="longestStreak">12</div>
+            <div class="metric-label">最長連續天數</div>
+            <div class="metric-change positive">新紀錄！</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 詳細圖表 -->
+    <section class="detailed-charts">
+      <!-- 第一行圖表 -->
+      <div class="chart-row">
+        <div class="chart-container large">
+          <div class="chart-header">
+            <h3>學習時間趨勢</h3>
+            <div class="chart-controls">
+              <select id="timeChartType">
+                <option value="daily">每日</option>
+                <option value="weekly">每週</option>
+                <option value="monthly">每月</option>
+              </select>
+            </div>
+          </div>
+          <div class="chart-wrapper">
+            <canvas id="studyTimeChart"></canvas>
+          </div>
+        </div>
+        
+        <div class="chart-container medium">
+          <div class="chart-header">
+            <h3>正確率分佈</h3>
+          </div>
+          <div class="chart-wrapper">
+            <canvas id="accuracyDistChart"></canvas>
+          </div>
+        </div>
+      </div>
+
+      <!-- 第二行圖表 -->
+      <div class="chart-row">
+        <div class="chart-container medium">
+          <div class="chart-header">
+            <h3>科目掌握程度雷達圖</h3>
+          </div>
+          <div class="chart-wrapper">
+            <canvas id="subjectRadarChart"></canvas>
+          </div>
+        </div>
+        
+        <div class="chart-container medium">
+          <div class="chart-header">
+            <h3>難度分佈堆疊圖</h3>
+          </div>
+          <div class="chart-wrapper">
+            <canvas id="difficultyStackChart"></canvas>
+          </div>
+        </div>
+      </div>
+
+      <!-- 第三行圖表 -->
+      <div class="chart-row">
+        <div class="chart-container large">
+          <div class="chart-header">
+            <h3>學習熱力圖</h3>
+            <div class="chart-controls">
+              <label>
+                <input type="checkbox" id="showWeekends" checked> 顯示週末
+              </label>
+            </div>
+          </div>
+          <div class="heatmap-container" id="studyHeatmap">
+            <!-- 熱力圖將通過 JS 生成 -->
+          </div>
+        </div>
+      </div>
+
+      <!-- 第四行圖表 -->
+      <div class="chart-row">
+        <div class="chart-container medium">
+          <div class="chart-header">
+            <h3>答題速度vs正確率散點圖</h3>
+          </div>
+          <div class="chart-wrapper">
+            <canvas id="speedAccuracyScatter"></canvas>
+          </div>
+        </div>
+        
+        <div class="chart-container medium">
+          <div class="chart-header">
+            <h3>學習效率趨勢</h3>
+          </div>
+          <div class="chart-wrapper">
+            <canvas id="efficiencyChart"></canvas>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 詳細數據表格 -->
+    <section class="data-table-section">
+      <div class="table-header">
+        <h3>詳細數據</h3>
+        <div class="table-controls">
+          <button class="btn-secondary" id="exportData">📊 匯出數據</button>
+          <button class="btn-secondary" id="printReport">🖨️ 列印報告</button>
+        </div>
+      </div>
+      
+      <div class="data-table-container">
+        <table class="data-table" id="analyticsTable">
+          <thead>
+            <tr>
+              <th>日期</th>
+              <th>題數</th>
+              <th>正確率</th>
+              <th>學習時間</th>
+              <th>平均速度</th>
+              <th>科目分佈</th>
+              <th>改善建議</th>
+            </tr>
+          </thead>
+          <tbody id="analyticsTableBody">
+            <!-- 數據行將通過 JS 動態生成 -->
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- 學習洞察 -->
+    <section class="insights-section">
+      <h3>🔍 學習洞察</h3>
+      <div class="insights-grid">
+        <div class="insight-card">
+          <div class="insight-header">
+            <h4>📈 進步最快的科目</h4>
+          </div>
+          <div class="insight-content">
+            <div class="insight-subject">數學</div>
+            <div class="insight-improvement">+15.3%</div>
+            <div class="insight-detail">在二次函數和三角函數方面有顯著提升</div>
+          </div>
+        </div>
+        
+        <div class="insight-card">
+          <div class="insight-header">
+            <h4>⚠️ 需要關注的領域</h4>
+          </div>
+          <div class="insight-content">
+            <div class="insight-subject">物理</div>
+            <div class="insight-improvement">-2.1%</div>
+            <div class="insight-detail">力學部分正確率下降，建議加強練習</div>
+          </div>
+        </div>
+        
+        <div class="insight-card">
+          <div class="insight-header">
+            <h4>⏰ 最佳學習時段</h4>
+          </div>
+          <div class="insight-content">
+            <div class="insight-subject">下午 2-4 點</div>
+            <div class="insight-improvement">85.2%</div>
+            <div class="insight-detail">此時段正確率最高，專注力最佳</div>
+          </div>
+        </div>
+        
+        <div class="insight-card">
+          <div class="insight-header">
+            <h4>🎯 個人化建議</h4>
+          </div>
+          <div class="insight-content">
+            <div class="insight-recommendations">
+              <ul>
+                <li>增加物理練習時間至每日 30 分鐘</li>
+                <li>利用下午時段進行困難題目練習</li>
+                <li>每週安排 2 次錯題複習</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <script src="shared-data.js"></script>
+  <script src="analytics.js"></script>
+</body>
+</html>
